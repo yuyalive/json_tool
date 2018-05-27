@@ -1,1 +1,0 @@
-{"TCP_ROUTING_ORG": "[{\"cluster\": \"dev01\", \"port_number\": 20, \"org\": \"aaa\"}, {\"cluster\": \"dev01\", \"port_number\": 20, \"org\": \"bbb\"}, {\"cluster\": \"dev01\", \"port_number\": \"20\", \"org\": \"pr12\"}]"}
