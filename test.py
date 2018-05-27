@@ -1,22 +1,24 @@
 # coding:utf-8
 
 import sys
+import platform
 import json
+
+# python2/3互換用input関数
+def user_input(val):
+    if platform.python_version_tuple()[0] == '2':
+        return raw_input(val)
+    else:
+        return input(val)
 
 # jsonファイル読み込み
 f = open(sys.argv[1], 'r')
-# 文字列からdict型へ変換
+# jsonデコード
 json_dict = json.load(f)
-print('json_dict:{}'.format(type(json_dict)))
 
-# 追加する情報を入力
-# 注意:python2:raw_input python3: input 
-print('cluster名を入力してください。')
-cluster = raw_input('>> ')
-
-print('org名を入力してください。')
-org = raw_input('>> ')
-
+# 追加する情報を設定 
+cluster = user_input('cluster名を入力してください >> ')
+org = user_input('org名を入力してください >> ')
 port_number = 20
 
 print('以下で登録します。よろしいですか？')
@@ -25,21 +27,13 @@ print('cluster:' + cluster)
 print('org:' + org)
 print('port_number(固定):' + str(port_number))
 print('---')
-if raw_input('(y/n) ') != 'y':
+if user_input('y/n >> ') != 'y':
     sys.exit()
 
 # TCP_ROUTING_ORG 追加
-tcp_routing_org_dict = json.loads(json_dict["TCP_ROUTING_ORG"])
-print(str(tcp_routing_org_dict))
-tcp_routing_org_dict.append({
-    u"cluster":unicode(cluster),
-    u"org":unicode(org),
-    u"port_number":unicode(20)
-    })
-print(tcp_routing_org_dict)
-
-# 値更新
-json_dict["TCP_ROUTING_ORG"] = json.dumps(tcp_routing_org_dict)
+tcp_routing_org = json.loads(json_dict["TCP_ROUTING_ORG"])
+tcp_routing_org.append({"cluster":cluster,"org":org,"port_number":20})
+json_dict["TCP_ROUTING_ORG"] = json.dumps(tcp_routing_org)
 
 # ファイル更新
 f = open(sys.argv[1], 'w')
